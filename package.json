@@ -1,0 +1,24 @@
+{
+  "name": "self-websocket",
+  "version": "1.0.0",
+  "description": "聊天室",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zhangzhenguo3352/self-websocket.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zhangzhenguo3352/self-websocket/issues"
+  },
+  "homepage": "https://github.com/Zhangzhenguo3352/self-websocket#readme",
+  "dependencies": {
+    "socket.io": "^1.5.1",
+    "ws": "^1.1.1"
+  }
+}

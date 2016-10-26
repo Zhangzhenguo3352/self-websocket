@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<p id="p1"></p>
+	<span>用事件emit 和 on 得到服务器发送过来的信息是:</span>
+	<span id="span1"></span>
+	<br/>
+	<span>用事件message得到服务器发送过来的信息是:</span>
+	<span id="span2"></span>
+</body>
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+
+
+<script type="text/javascript">
+window.onload=function(){
+	//客户端 链接服务器
+
+	var socket = io.connect('ws://localhost:3000/');
+
+	// 监听 链接成功事件
+	socket.on('connect',function(){
+		document.querySelector('#p1').innerHTML = '服务器链接成功'
+		// =向服务器发送信息
+		socket.send('hello server')
+	})
+	// 监听 服务器端发送过来的信息
+	socket.on('message',function(msg){
+		document.querySelector('#span2').innerHTML = '服务器发送消息是'+msg
+		
+	})
+	// 监听 服务端 链接终端 事件
+	socket.on('disconnect',function(){
+		document.querySelector('#p1').innerHTML = '服务器链接中断'
+		
+	})
+
+	//可以利用 事件 来发消息 emit/on
+	//客户端 向 服务端发送 信息
+	socket.emit('aaa',520)
+
+	// 服务端 向 客户端过来了信息是
+	socket.on('bbb',function(doc){
+		document.querySelector('#span1').innerHTML = '服务器发送消息是'+doc
+		
+	})
+
+
+
+
+
+
+
+}
+</script>
+</html>

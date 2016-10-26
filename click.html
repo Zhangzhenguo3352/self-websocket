@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<meta charset ="utf-8">
+<head>
+	<title></title>
+</head>
+<body>
+<input type="checkbox" value="input1" id="input1">
+<input type="button" value="input2" id="input2">
+<div>我要知道我点了哪一个元素</div>
+
+</body>
+<script type="text/javascript">
+window.onload=function(){
+	var aInput = document.getElementsByTagName('input')
+	// var in_2 = document.querySelector('#input2')
+	
+	for(var i=0;i<aInput.length;i++){
+		(function(i){
+			aInput[i].onclick=function(){
+				// alert(aInput[i].checked)
+				if(aInput[i].checked){
+					console.log(aInput)
+					aInput.style.backgroundColor = 'red'
+				}
+			}
+		})(i)
+		
+	}
+	if(aInput[0].checked){
+					console.log('aInput')
+					// aInput.style.backgroundColor = 'red'
+				}
+}
+</script>
+</html>
