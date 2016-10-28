@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<style type="text/css">
+	#div_connent{ width:100%;margin:0 auto 100px;border:1px solid #000;}
+	#div_connent li{padding:5px;border:1px solid #ccc;margin:3px;}
+</style>
+
+<body>
+<div id="div_connent">
+	<!-- <ul>
+		<li>sdas</li>
+	</ul> -->
+</div>
+<input type="text" id="input_connect"/><input type="button" value="发送" id="send"/>
+</body>
+<script type="text/javascript">
+window.onload=function(){
+	var send = document.getElementById('send')
+	var input_connect = document.getElementById('input_connect')
+	var div_connent = document.getElementById('div_connent')
+
+	var ul = document.createElement("ul");
+	function createElememt(str){
+		var li = document.createElement("li");
+		li.innerHTML = str;
+		ul.appendChild(li)
+		div_connent.appendChild(ul)
+	}
+	var socket = io.connect('ws://localhost:3000/')
+
+	// 链接服务器
+	socket.on('connect',function(){
+		console.log('服务器链接成功')
+		//欢迎，标题文字
+		
+	})
+	//监听服务器 发送的消息
+	socket.on('message',function(msg){
+		createElememt(msg.info)
+		console.log(msg)
+		// console.log(msg)
+	})
+
+
+	
+
+	send.onclick=function(){
+		socket.send(input_connect.value)
+		
+		
+		
+
+	}
+	
+}
+</script>
+</html>

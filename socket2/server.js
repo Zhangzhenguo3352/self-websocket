@@ -1,4 +1,4 @@
-//添加 命名空间思想 io.of('red').on('connection',function(xxx){})
+//添加 命名空间思想 io.of('red').on('connection',function(){})
 var express = require('express')
 var app = express();
 

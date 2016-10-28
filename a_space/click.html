@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<meta charset ="utf-8">
+<head>
+	<title></title>
+</head>
+<style type="text/css">
+.active{background-color: red}
+</style>
+<body>
+<input type="radio" value="input1" id="input1" name="v_a">红房间
+<br>
+<input type="radio" value="input2" id="input2"  name="v_a">绿房间
+<div>我要知道我点了哪一个元素 :<span id="span"></span></div>
+<br>
+<input type="button" value="华山派" class="pai"/>
+<input type="button" value="少林派" class="pai"/>
+
+<div>发送消息：<input type="text" id="value"/>
+	<input type="button" value="发送" class="send"/>
+</div>
+
+</body>
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+window.onload=function(){
+	
+	// 第一步，协议声明
+	// var redSocket = io.connect('ws://localhost:3000/red')
+	var redSocket = io.connect('ws://localhost:3000/red');
+	// 监听 链接是否成功 connect
+	redSocket.on('connect',function(){
+		console.log('red链接服务器成功')
+
+	})
+	var greenSocket = io.connect('ws://localhost:3000/green')
+	greenSocket.on('connect',function(){
+		console.log('green链接成功')
+	})
+
+	greenSocket.on('message',function(msg){
+		console.log(msg)
+	})
+
+
+	var aInput = document.getElementsByTagName('input')
+	var oSpan = document.querySelector('#span')
+	
+	for(var i=0;i<aInput.length;i++){
+		(function(i){
+			aInput[i].onclick=function(){
+				if(aInput[i].checked){
+					
+					if(i==0){
+						oSpan.innerHTML = '红房间'
+						redSocket.emit('red','红房间')
+					}else{
+						oSpan.innerHTML = '绿房间'
+						greenSocket.emit('green','绿房间')
+					}
+					
+				}
+			}
+		})(i)
+		
+	}
+
+	//点击那个派别
+	var button_pai = document.getElementsByClassName('pai')
+	
+	for(var i=0;i<button_pai.length;i++){
+		button_pai[i].onclick=function(){
+			// alert(this.className)
+			for(j=0;j<button_pai.length;j++){
+				button_pai[j].className = 'pai'
+			}
+			this.className = 'pai active'
+			if(this.value == '华山派'){
+				// 华山派
+				//点击 华山派 给 绿房间发送消息
+				greenSocket.emit('room','hua')
+			}else{
+				// 少林派
+
+				greenSocket.emit('room','shao')
+			}
+		}
+	}
+	// 点击发送消息
+	var send = document.getElementsByClassName('send')[0]
+	var oValue = document.getElementById('value')
+	send.onclick=function(){
+		// 这个 打开 两浏览器 都能收到我 写的 value 是什么
+		greenSocket.emit('green',oValue.value)
+	}
+	
+}
+</script>
+</html>
