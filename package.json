@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Zhangzhenguo3352/self-websocket#readme",
   "dependencies": {
+    "jquery": "^3.1.1",
     "socket.io": "^1.5.1",
     "ws": "^1.1.1"
   }

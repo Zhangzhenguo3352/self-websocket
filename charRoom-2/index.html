@@ -4,17 +4,30 @@
 	<title></title>
 </head>
 <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+
 <style type="text/css">
 	#div_connent{ width:100%;margin:0 auto 100px;border:1px solid #000;}
 	#div_connent li{padding:5px;border:1px solid #ccc;margin:3px;}
+	.color_399{color:#de1576;cursor:pointer;}
+	.person{padding:5px 10px;border:1px solid #ccc;}
+	.person li{margin:5px;padding:6px 8px;border:1px solid #ccc;}
 </style>
 
 <body>
+
 <div id="div_connent">
 	<!-- <ul>
 		<li>sdas</li>
 	</ul> -->
 </div>
+<!-- 来到房间的人有几个 -->
+<div class="person">来到房间的人有：
+	<ul>
+		<!-- <li>1231</li>
+		<li>1231</li> -->
+	</ul>
+</div>
+
 <input type="text" id="input_connect"/><input type="button" value="发送" id="send"/>
 </body>
 <script type="text/javascript">
@@ -26,12 +39,25 @@ window.onload=function(){
 	var ul = document.createElement("ul");
 	function createElememt(str){
 		var li = document.createElement("li");
-		li.innerHTML = str;
+
+		li.innerHTML ='<span class="color_399">'+str.user+'</span>'+str.connect
 		ul.appendChild(li)
 		div_connent.appendChild(ul)
 	}
 	var socket = io.connect('ws://localhost:3000/')
 
+
+	// 发送我要知道 当前用户有几个
+	socket.emit('us_info')
+	// 给客户端是 当前用户有几个
+	socket.on('us_info',function(msg){
+		// 为了 一次创建 累加 过多，保证每次先清空
+		$('.person ul').html('')
+		// 得到是一个 数组，循环创建 添加到 ul 里
+		msg.forEach(function(item){
+			$('.person ul').append('<li>'+item+'</li>')
+		})
+	})
 	// 链接服务器
 	socket.on('connect',function(){
 		console.log('服务器链接成功')
@@ -40,7 +66,7 @@ window.onload=function(){
 	})
 	//监听服务器 发送的消息
 	socket.on('message',function(msg){
-		createElememt(msg.info)
+		createElememt({user:msg.user,connect:msg.info})
 		console.log(msg)
 		// console.log(msg)
 	})
@@ -50,12 +76,31 @@ window.onload=function(){
 
 	send.onclick=function(){
 		socket.send(input_connect.value)
-		
-		
-		
-
+	
 	}
+	// socket.on('us_info',function(msg){
+	// 	if(msg.length == 1){
+			// msg.forEach(function(item){
+			// 	$('.person ul').append('<li>'+item+'</li>')
+			// })
+	// 	}else{
+	// 		// console.log(+'=====')
+			
+	// 			$('.person ul').append('<li>'+msg[msg.length-1]+'</li>')
+			
+	// 	}
+	// 	console.log(msg)
+		
+	// })
+			
+
+	$('body').delegate('ul li span','click',function(){
+		$('#input_connect').val('@'+$(this).text()+' ')
+	})
+	
+		
 	
 }
 </script>
+<script src="./lib/jquery.js"></script>
 </html>
